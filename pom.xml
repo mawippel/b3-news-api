@@ -34,14 +34,10 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.2.11</version>
 		</dependency>
-
-
-		<!-- <dependency> -->
-		<!-- <groupId>com.amazonaws</groupId> -->
-		<!-- <artifactId>aws-java-sdk-comprehend</artifactId> -->
-		<!-- </dependency> -->
-
-
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-comprehend</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
