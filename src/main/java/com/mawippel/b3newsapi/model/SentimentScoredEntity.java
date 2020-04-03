@@ -4,21 +4,23 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @MappedSuperclass
-public abstract class SentimentScoredEntity {
+public abstract class SentimentScoredEntity extends BasicEntity {
 
 	@Column
-	private double positive;
+	private Float positive;
 
 	@Column
-	private double negative;
+	private Float negative;
 
 	@Column
-	private double neutral;
+	private Float neutral;
 
 	@Column
-	private double mixed;
+	private Float mixed;
 
 }

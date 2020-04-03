@@ -9,18 +9,21 @@ import com.mawippel.b3newsapi.service.SentimentService;
 
 @Configuration
 @EnableScheduling
-public class SentimentAnalyzerScheduler {
+public class ParagraphSentimentAnalyzerScheduler implements SchedulerOptions {
 
-	private final long MINUTES = 60000;
-	private final long executionRate = 15 * MINUTES;
-	
 	@Autowired
 	private SentimentService sentimentService;
 
 	@Scheduled(fixedRate = executionRate)
 	public void execute() {
-		System.out.println("Starting Task " + System.currentTimeMillis() / 1000);
-//		sentimentService.analyzeNewsWithoutSentiment();
+		analyzeParagraphs();
+	}
+
+	private void analyzeParagraphs() {
+		System.out.println("Iniciando análise dos parágrafos: " + System.currentTimeMillis() / 1000);
+		int analyzedNews = sentimentService.analyzeParagraphsWithoutSentiment();
+		System.out.printf("Número de parágrafos analisados: %s\n", analyzedNews);
+		System.out.println("Análise dos parágrafos finalizada.");
 	}
 
 }

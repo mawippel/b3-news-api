@@ -1,5 +1,6 @@
 package com.mawippel.b3newsapi.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
@@ -8,6 +9,6 @@ import com.mawippel.b3newsapi.model.NewsEntity;
 
 public interface NewsRepository extends CrudRepository<NewsEntity, UUID> {
 
-	Iterable<NewsEntity> findByPositiveIsNull();
+	List<NewsEntity> findByPositiveIsNull();
 
 }
