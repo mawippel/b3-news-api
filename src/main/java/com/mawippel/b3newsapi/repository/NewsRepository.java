@@ -8,4 +8,6 @@ import com.mawippel.b3newsapi.model.NewsEntity;
 
 public interface NewsRepository extends CrudRepository<NewsEntity, UUID> {
 
+	Iterable<NewsEntity> findByPositiveIsNull();
+
 }

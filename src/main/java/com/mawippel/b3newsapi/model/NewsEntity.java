@@ -9,23 +9,25 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "news")
-public class NewsEntity {
+public class NewsEntity extends SentimentScoredEntity {
 
 	@Id
 	@Column
 	private UUID id;
-	
+
 	@Column
 	private String title;
-	
+
 	@Column
 	private String href;
-	
-	@Column	
-	private LocalDateTime created_at;	
+
+	@Column
+	private LocalDateTime created_at;
 
 }
