@@ -1,9 +1,14 @@
 package com.mawippel.b3newsapi.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.comprehend.model.DetectSentimentResult;
+import com.mawippel.b3newsapi.model.ParagraphEntity;
 import com.mawippel.b3newsapi.repository.NewsRepository;
 import com.mawippel.b3newsapi.repository.ParagraphRepository;
 
@@ -12,7 +17,7 @@ public class SentimentService {
 
 	@Autowired
 	private NewsRepository newsRepo;
-	
+
 	@Autowired
 	private ParagraphRepository paragraphRepo;
 
@@ -36,7 +41,7 @@ public class SentimentService {
 		});
 		return newsWithoutSentiment.size();
 	}
-	
+
 	/**
 	 * Analyze the sentiment of News that weren't analyzed
 	 * 
@@ -53,6 +58,13 @@ public class SentimentService {
 			paragraphRepo.save(paragraph);
 		});
 		return paragraphsWithoutSentiment.size();
+	}
+
+	public void deleteAllRepeatedParagraphs() {
+		List<String> collectedTexts = paragraphRepo.findAll().stream()
+				.collect(Collectors.groupingBy(ParagraphEntity::getText, Collectors.counting())).entrySet().stream()
+				.filter(x -> x.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList());
+		paragraphRepo.deleteByTextIn(collectedTexts);
 	}
 
 }
