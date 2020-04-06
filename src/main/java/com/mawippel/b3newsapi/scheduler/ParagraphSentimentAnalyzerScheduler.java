@@ -16,7 +16,8 @@ public class ParagraphSentimentAnalyzerScheduler implements SchedulerOptions {
 
 	@Scheduled(fixedRate = executionRate)
 	public void execute() {
-		analyzeParagraphs();
+		sentimentService.deleteAllRepeatedParagraphs();
+//		analyzeParagraphs();
 	}
 
 	private void analyzeParagraphs() {
