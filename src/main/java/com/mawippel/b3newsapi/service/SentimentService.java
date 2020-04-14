@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.comprehend.model.DetectSentimentResult;
 import com.mawippel.b3newsapi.model.ParagraphEntity;
+import com.mawippel.b3newsapi.model.Sentiment;
 import com.mawippel.b3newsapi.repository.NewsRepository;
 import com.mawippel.b3newsapi.repository.ParagraphRepository;
 
@@ -43,9 +44,9 @@ public class SentimentService {
 	}
 
 	/**
-	 * Analyze the sentiment of News that weren't analyzed
+	 * Analyze the sentiment of Paragraphs that weren't analyzed
 	 * 
-	 * @return the number of analyzed news
+	 * @return the number of analyzed paragrahps
 	 */
 	public int analyzeParagraphsWithoutSentiment() {
 		var paragraphsWithoutSentiment = paragraphRepo.findByPositiveIsNull();
@@ -58,6 +59,35 @@ public class SentimentService {
 			paragraphRepo.save(paragraph);
 		});
 		return paragraphsWithoutSentiment.size();
+	}
+
+	/**
+	 * Analyze the overall sentiment of Paragraphs that weren't analyzed
+	 * 
+	 * @return the number of analyzed paragraphs
+	 */
+	public int analyzeOverallParagraphsSentiment() {
+		var paragraphsWithoutOverallSentiment = paragraphRepo.findBySentimentIsNull();
+		paragraphsWithoutOverallSentiment.forEach(paragraph -> {
+			Float positive = paragraph.getPositive();
+			Float negative = paragraph.getNegative();
+			Sentiment overallSentiment = Sentiment.getSentimentByIndex(positive, negative);
+			paragraph.setSentiment(overallSentiment);
+			paragraphRepo.save(paragraph);
+		});
+		return paragraphsWithoutOverallSentiment.size();
+	}
+
+	public int analyzeOverallNewsSentiment() {
+		var newsWithoutOverallSentiment = newsRepo.findBySentimentIsNull();
+		newsWithoutOverallSentiment.forEach(news -> {
+			Float positive = news.getPositive();
+			Float negative = news.getNegative();
+			Sentiment overallSentiment = Sentiment.getSentimentByIndex(positive, negative);
+			news.setSentiment(overallSentiment);
+			newsRepo.save(news);
+		});
+		return newsWithoutOverallSentiment.size();
 	}
 
 	public void deleteAllRepeatedParagraphs() {
