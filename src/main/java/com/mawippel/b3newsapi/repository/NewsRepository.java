@@ -10,5 +10,7 @@ import com.mawippel.b3newsapi.model.NewsEntity;
 public interface NewsRepository extends JpaRepository<NewsEntity, UUID> {
 
 	List<NewsEntity> findByPositiveIsNull();
+	
+	List<NewsEntity> findBySentimentIsNull();
 
 }

@@ -22,6 +22,7 @@ public class NewsSentimentAnalyzerScheduler implements SchedulerOptions {
 	private void analyzeNews() {
 		System.out.println("Iniciando análise das notícias: " + System.currentTimeMillis() / 1000);
 		int analyzedNews = sentimentService.analyzeNewsWithoutSentiment();
+		sentimentService.analyzeOverallNewsSentiment();
 		System.out.printf("Número de notícias analisadas: %s\n", analyzedNews);
 		System.out.println("Análise das notícias finalizada.");
 	}

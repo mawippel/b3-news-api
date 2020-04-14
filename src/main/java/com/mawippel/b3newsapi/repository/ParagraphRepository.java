@@ -12,6 +12,8 @@ public interface ParagraphRepository extends JpaRepository<ParagraphEntity, UUID
 
 	List<ParagraphEntity> findByPositiveIsNull();
 	
+	List<ParagraphEntity> findBySentimentIsNull();
+	
 	@Transactional
 	void deleteByTextIn(List<String> texts);
 	

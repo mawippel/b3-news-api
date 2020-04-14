@@ -1,6 +1,8 @@
 package com.mawippel.b3newsapi.model;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 
 import lombok.Data;
@@ -22,5 +24,8 @@ public abstract class SentimentScoredEntity extends BasicEntity {
 
 	@Column
 	private Float mixed;
+
+	@Enumerated(EnumType.STRING)
+	private Sentiment sentiment;
 
 }
