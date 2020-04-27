@@ -20,6 +20,12 @@ public class NewsEntity extends SentimentScoredEntity {
 
 	@Column
 	private String href;
+	
+	@Column(name = "website_name")
+	private String websiteName;
+	
+	@Column(name = "website_photo")
+	private String websitePhoto;
 
 	@Column
 	private LocalDateTime created_at;
