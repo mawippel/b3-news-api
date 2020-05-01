@@ -1,6 +1,7 @@
 package com.mawippel.b3newsapi.service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,23 +15,34 @@ import com.mawippel.b3newsapi.repository.StockRepository;
 
 @Service
 public class ParagraphService {
-	
+
 	@Autowired
 	private ParagraphRepository paragraphRepo;
-	
+
 	@Autowired
 	private NewsRepository newsRepo;
-	
+
 	@Autowired
 	private StockRepository stockRepo;
-	
+
 	@Transactional
 	public void findAndSaveQuotedStocks() {
 		List<StockEntity> allStocks = stockRepo.findAll();
 		List<ParagraphEntity> allParagraphs = paragraphRepo.findAll();
 		for (ParagraphEntity paragraph : allParagraphs) {
-			for (StockEntity stock : allStocks) {				
-				if (paragraph.getText().toUpperCase().contains(stock.getTicker())) {
+			for (StockEntity stock : allStocks) {
+				String namePatternString = "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)" + stock.getName().toUpperCase()
+						+ "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)";
+				String companyPatternString = "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)"
+						+ stock.getCompany().toUpperCase() + "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)";
+
+				String upperCaseParagraph = paragraph.getText().toUpperCase();
+				Pattern namePattern = Pattern.compile(namePatternString);
+				Pattern companyPattern = Pattern.compile(companyPatternString);
+				
+				if (paragraph.getText().toUpperCase().contains(stock.getTicker())
+						|| namePattern.matcher(upperCaseParagraph).find()
+						|| companyPattern.matcher(upperCaseParagraph).find()) {
 					paragraph.getNews().getStocks().add(stock);
 				}
 			}
