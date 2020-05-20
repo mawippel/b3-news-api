@@ -1,15 +1,11 @@
 package com.mawippel.b3newsapi.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.comprehend.model.DetectSentimentResult;
-import com.mawippel.b3newsapi.model.ParagraphEntity;
 import com.mawippel.b3newsapi.model.Sentiment;
+import com.mawippel.b3newsapi.model.SentimentScoredEntity;
 import com.mawippel.b3newsapi.repository.NewsRepository;
 import com.mawippel.b3newsapi.repository.ParagraphRepository;
 
@@ -69,10 +65,7 @@ public class SentimentService {
 	public int analyzeOverallParagraphsSentiment() {
 		var paragraphsWithoutOverallSentiment = paragraphRepo.findBySentimentIsNull();
 		paragraphsWithoutOverallSentiment.forEach(paragraph -> {
-			Float positive = paragraph.getPositive();
-			Float negative = paragraph.getNegative();
-			Sentiment overallSentiment = Sentiment.getSentimentByIndex(positive, negative);
-			paragraph.setSentiment(overallSentiment);
+			paragraph.setSentiment(getOverallSentiment(paragraph));
 			paragraphRepo.save(paragraph);
 		});
 		return paragraphsWithoutOverallSentiment.size();
@@ -81,20 +74,16 @@ public class SentimentService {
 	public int analyzeOverallNewsSentiment() {
 		var newsWithoutOverallSentiment = newsRepo.findBySentimentIsNull();
 		newsWithoutOverallSentiment.forEach(news -> {
-			Float positive = news.getPositive();
-			Float negative = news.getNegative();
-			Sentiment overallSentiment = Sentiment.getSentimentByIndex(positive, negative);
-			news.setSentiment(overallSentiment);
+			news.setSentiment(getOverallSentiment(news));
 			newsRepo.save(news);
 		});
 		return newsWithoutOverallSentiment.size();
 	}
-
-	public void deleteAllRepeatedParagraphs() {
-		List<String> collectedTexts = paragraphRepo.findAll().stream()
-				.collect(Collectors.groupingBy(ParagraphEntity::getText, Collectors.counting())).entrySet().stream()
-				.filter(x -> x.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList());
-		paragraphRepo.deleteByTextIn(collectedTexts);
+	
+	private Sentiment getOverallSentiment(SentimentScoredEntity entity) {
+		Float positive = entity.getPositive();
+		Float negative = entity.getNegative();
+		return Sentiment.getSentimentByIndex(positive, negative);
 	}
 
 }

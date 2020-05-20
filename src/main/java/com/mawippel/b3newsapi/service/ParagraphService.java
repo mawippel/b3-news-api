@@ -1,7 +1,9 @@
 package com.mawippel.b3newsapi.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class ParagraphService {
 		List<ParagraphEntity> allParagraphs = paragraphRepo.findAll();
 		for (ParagraphEntity paragraph : allParagraphs) {
 			for (StockEntity stock : allStocks) {
+				//TODO extrair o build dos patterns pra outro metodo
 				String namePatternString = "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)" + stock.getName().toUpperCase()
 						+ "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)";
 				String companyPatternString = "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)"
@@ -48,6 +51,13 @@ public class ParagraphService {
 			}
 			newsRepo.save(paragraph.getNews());
 		}
+	}
+	
+	public void deleteAllRepeatedParagraphs() {
+		List<String> collectedTexts = paragraphRepo.findAll().stream()
+				.collect(Collectors.groupingBy(ParagraphEntity::getText, Collectors.counting())).entrySet().stream()
+				.filter(x -> x.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList());
+		paragraphRepo.deleteByTextIn(collectedTexts);
 	}
 
 }
