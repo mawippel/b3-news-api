@@ -34,7 +34,7 @@ public class NewsController {
 	}
 
 	@GetMapping("/{id}/paragraphs")
-	Iterable<ParagraphEntity> listParagraphs(@PathVariable("id") String id) {
+	Iterable<ParagraphEntity> listParagraphsByNews(@PathVariable("id") String id) {
 		return paragraphRepository.findByNewsId(UUID.fromString(id));
 	}
 

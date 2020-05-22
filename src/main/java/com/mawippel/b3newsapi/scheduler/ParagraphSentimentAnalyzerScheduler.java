@@ -14,21 +14,19 @@ public class ParagraphSentimentAnalyzerScheduler implements SchedulerOptions {
 
 	@Autowired
 	private SentimentService sentimentService;
-	
+
 	@Autowired
 	private ParagraphService paragraphService;
 
 	@Scheduled(fixedRate = executionRate)
 	public void execute() {
-		paragraphService.deleteAllRepeatedParagraphs();
-		analyzeParagraphs();
-	}
-
-	private void analyzeParagraphs() {
 		System.out.println("Iniciando análise dos parágrafos: " + System.currentTimeMillis() / 1000);
+		
+		paragraphService.deleteAllRepeatedParagraphs();
 		int analyzedNews = sentimentService.analyzeParagraphsWithoutSentiment();
 		sentimentService.analyzeOverallParagraphsSentiment();
 		paragraphService.findAndSaveQuotedStocks();
+		
 		System.out.printf("Número de parágrafos analisados: %s\n", analyzedNews);
 		System.out.println("Análise dos parágrafos finalizada.");
 	}
