@@ -33,16 +33,10 @@ public class ParagraphService {
 		List<ParagraphEntity> allParagraphs = paragraphRepo.findAll();
 		for (ParagraphEntity paragraph : allParagraphs) {
 			for (StockEntity stock : allStocks) {
-				//TODO extrair o build dos patterns pra outro metodo
-				String namePatternString = "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)" + stock.getName().toUpperCase()
-						+ "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)";
-				String companyPatternString = "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)"
-						+ stock.getCompany().toUpperCase() + "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)";
+				Pattern namePattern = getNameRegexPattern(stock);
+				Pattern companyPattern = getCompanyRegexPattern(stock);
 
 				String upperCaseParagraph = paragraph.getText().toUpperCase();
-				Pattern namePattern = Pattern.compile(namePatternString);
-				Pattern companyPattern = Pattern.compile(companyPatternString);
-				
 				if (paragraph.getText().toUpperCase().contains(stock.getTicker())
 						|| namePattern.matcher(upperCaseParagraph).find()
 						|| companyPattern.matcher(upperCaseParagraph).find()) {
@@ -52,12 +46,22 @@ public class ParagraphService {
 			newsRepo.save(paragraph.getNews());
 		}
 	}
-	
+
 	public void deleteAllRepeatedParagraphs() {
 		List<String> collectedTexts = paragraphRepo.findAll().stream()
 				.collect(Collectors.groupingBy(ParagraphEntity::getText, Collectors.counting())).entrySet().stream()
 				.filter(x -> x.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList());
 		paragraphRepo.deleteByTextIn(collectedTexts);
+	}
+
+	private Pattern getNameRegexPattern(StockEntity stock) {
+		return Pattern.compile("((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)" + stock.getName().toUpperCase()
+				+ "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)");
+	}
+
+	private Pattern getCompanyRegexPattern(StockEntity stock) {
+		return Pattern.compile("((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)" + stock.getCompany().toUpperCase()
+				+ "((^)|(\\s+)|(\\.+)|(!)|(,)|(\\?)|(;)|$)");
 	}
 
 }

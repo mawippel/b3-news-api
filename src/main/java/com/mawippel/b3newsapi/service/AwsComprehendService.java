@@ -14,10 +14,8 @@ public class AwsComprehendService {
 
 	public DetectSentimentResult detectSentiment(String text) {
 		AWSCredentialsProvider awsCreds = DefaultAWSCredentialsProviderChain.getInstance();
-
 		AmazonComprehend comprehendClient = AmazonComprehendClientBuilder.standard().withCredentials(awsCreds)
 				.withRegion("us-east-2").build();
-
 		DetectSentimentRequest detectSentimentRequest = new DetectSentimentRequest().withText(text)
 				.withLanguageCode("pt");
 		DetectSentimentResult detectSentimentResult = comprehendClient.detectSentiment(detectSentimentRequest);

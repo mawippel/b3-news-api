@@ -16,13 +16,11 @@ public class NewsSentimentAnalyzerScheduler implements SchedulerOptions {
 
 	@Scheduled(fixedRate = executionRate)
 	public void execute() {
-		analyzeNews();
-	}
-
-	private void analyzeNews() {
 		System.out.println("Iniciando análise das notícias: " + System.currentTimeMillis() / 1000);
+		
 		int analyzedNews = sentimentService.analyzeNewsWithoutSentiment();
 		sentimentService.analyzeOverallNewsSentiment();
+		
 		System.out.printf("Número de notícias analisadas: %s\n", analyzedNews);
 		System.out.println("Análise das notícias finalizada.");
 	}
