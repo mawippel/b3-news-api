@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "paragraphs")
 public class ParagraphEntity extends SentimentScoredEntity {
 
-	@Column
+	@Column(length = 2000)
 	private String text;
 
 	@ManyToOne
