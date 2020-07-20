@@ -22,7 +22,7 @@
   </class>  
   <enumeration id="3" language="java" name="com.mawippel.b3newsapi.model.Sentiment" project="b3-news-api" 
     file="/b3-news-api/src/main/java/com/mawippel/b3newsapi/model/Sentiment.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1088" y="318"/>    
+    <position height="-1" width="-1" x="1023" y="318"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -42,7 +42,7 @@
   <class id="5" language="java" name="com.mawippel.b3newsapi.controller.ParagraphController" project="b3-news-api" 
     file="/b3-news-api/src/main/java/com/mawippel/b3newsapi/controller/ParagraphController.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="428" y="535"/>    
+    <position height="-1" width="-1" x="427" y="543"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -71,10 +71,10 @@
   <association id="8">    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="9" name="sentiment">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="-65" y="0"/>      
       </attribute>      
       <multiplicity id="10" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="-65" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
