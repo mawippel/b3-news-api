@@ -21,7 +21,7 @@ public class ParagraphSentimentAnalyzerScheduler implements SchedulerOptions {
 	@Scheduled(fixedRate = executionRate)
 	public void execute() {
 		System.out.println("Iniciando análise dos parágrafos: " + System.currentTimeMillis() / 1000);
-		
+
 		paragraphService.deleteAllRepeatedParagraphs();
 		int analyzedNews = sentimentService.analyzeParagraphsWithoutSentiment();
 		sentimentService.analyzeOverallParagraphsSentiment();
